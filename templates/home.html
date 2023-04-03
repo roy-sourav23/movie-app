@@ -1,0 +1,143 @@
+{% extends "_base.html" %}
+
+{% block content %}
+
+{% if movie %}
+
+
+<section class="bg-primary bg-dark opacity-75 p-3 bg-gradient "
+    style="background-image: linear-gradient(to bottom, #009688, #006064, #000000); color:white ;">
+    <div class=" container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+
+            <div class="col-md-6 text-center">
+                <img class="card-img-top mb-5 mb-md-0 mx-auto d-block img-fluid" src="{{ movie.poster }}"
+                    alt="{{ movie.title }} poster"
+                    style="max-width: 70%; max-height: 70%; min-width: 200px; min-height: 150px;" />
+            </div>
+
+
+            <div class="col-md-6">
+
+                <h1 class="display-5 fw-bolder">{{ movie.title }}</h1>
+                <div class="small mb-1 muted mx-1">{{movie.year}} &middot; {{movie.rated}} &middot; {{movie.runtime}}
+                </div>
+                {% for genre in movie.genres%}
+                <span class="badge badge-primary border border-primary text-white"
+                    style="opacity: 1; color: #fff; background-color: #56a0f0;">{{ genre }}</span>
+
+                {% endfor %}
+                <br />
+                <br />
+                <p class="lead">{{movie.plot}}</p>
+                <br />
+
+                <div class="fs-5 mb-5">
+                    <span class="mx-2">
+                        <i class="bi bi-star-fill" style="color: yellow;"></i>{{movie.imdbRating}}/10
+                    </span>
+                    <span class="score mx-2">
+                        <span class="score-meta p-1"
+                            style="background-color:#54A72A; color:white">{{movie.metascore}}</span>
+                        MetaScore
+
+                </div>
+
+                <div class="fs-5 mb-5">
+                    <p><span class="fw-bold">Director </span>&nbsp;
+
+                        {% for director in movie.director %}
+                        <span class=" lead " style="color:#5993f1;">{{director}}</span>&nbsp; &nbsp;
+                        {% endfor %}
+
+                    </p>
+                    <hr />
+                    <p><span class="fw-bold">Writer </span>&nbsp;
+
+                        {% for writer in movie.writer %}
+                        <span class="lead" style="color:#5993f1;">{{writer}}</span>&nbsp; &nbsp;
+                        {% endfor %}
+
+                    </p>
+                    <hr />
+
+                    <p><span class="fw-bold">Actor </span>&nbsp;
+                        {% for actor in movie.actors %}
+                        <span class="lead" style="color:#5993f1;">{{actor}}</span> &nbsp; &nbsp;
+                        {% endfor %}
+                    </p>
+
+                    <hr />
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+<section class="py-1">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="d-flex align-items-center">
+            <div class="bg-warning rounded-pill align-self-stretch" style="width: 3px; height: 30px;"></div>
+            <h1 class="ipc-title__text" style="line-height: 30px;"><span>Details</span>
+                <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"
+                    class="ipc-icon ipc-icon--chevron-right-inline ipc-icon--inline ipc-title-link ipc-title-link-chevron"
+                    id="iconContext-chevron-right-inline" viewBox="0 0 24 24" fill="currentColor" role="presentation">
+                    <path
+                        d="M5.622.631A2.153 2.153 0 0 0 5 2.147c0 .568.224 1.113.622 1.515l8.249 8.34-8.25 8.34a2.16 2.16 0 0 0-.548 2.07c.196.74.768 1.317 1.499 1.515a2.104 2.104 0 0 0 2.048-.555l9.758-9.866a2.153 2.153 0 0 0 0-3.03L8.62.61C7.812-.207 6.45-.207 5.622.63z">
+                    </path>
+                </svg>
+            </h1>
+        </div>
+        <br />
+
+        <div class="fs-5 mb-5">
+            <p><span class="fw-bold">Release date </span>&nbsp;
+                <span class=" lead " style="color:#5993f1;">{{ movie.release_date}}</span>
+            </p>
+            <hr />
+
+            <p><span class="fw-bold">Countries of origin </span>&nbsp;
+
+                {% for country in movie.country %}
+                <span class=" lead " style="color:#5993f1;">{{country}}</span>&nbsp; &nbsp;
+                {% endfor %}
+
+            </p>
+            <hr />
+
+            <p><span class="fw-bold">Languages </span>&nbsp;
+
+                {% for language in movie.language %}
+                <span class=" lead " style="color:#5993f1;">{{language}}</span>&nbsp; &nbsp;
+                {% endfor %}
+
+            </p>
+            <hr />
+        </div>
+    </div>
+    {% if movie.boxoffice != "N/A" %}
+    <div class="container px-4 px-lg-5 my-5">
+
+        <div class="d-flex align-items-center">
+            <div class="bg-warning rounded-pill align-self-stretch" style="width: 3px; height: 30px;"></div>
+            <h1 class="ipc-title__text" style="line-height: 30px;"><span>Box office</span>
+                <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"
+                    class="ipc-icon ipc-icon--chevron-right-inline ipc-icon--inline ipc-title-link ipc-title-link-chevron"
+                    id="iconContext-chevron-right-inline" viewBox="0 0 24 24" fill="currentColor" role="presentation">
+                    <path
+                        d="M5.622.631A2.153 2.153 0 0 0 5 2.147c0 .568.224 1.113.622 1.515l8.249 8.34-8.25 8.34a2.16 2.16 0 0 0-.548 2.07c.196.74.768 1.317 1.499 1.515a2.104 2.104 0 0 0 2.048-.555l9.758-9.866a2.153 2.153 0 0 0 0-3.03L8.62.61C7.812-.207 6.45-.207 5.622.63z">
+                    </path>
+                </svg>
+            </h1>
+        </div>
+
+        <p><span class="fw-bold">Gross worldwide </span>&nbsp;
+            <span class="text-muted lead ">{{ movie.boxoffice}}</span>
+        </p>
+    </div>
+    {% endif %}
+</section>
+{% endif %}
+
+
+{% endblock content %}
