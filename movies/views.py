@@ -25,7 +25,6 @@ class HomePageView(TemplateView):
         data = response.json()
         if data.get("Response") == "False":
             return {}
-        print(data)
         return data
 
     def text_to_list(self, text):
