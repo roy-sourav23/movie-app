@@ -4,13 +4,14 @@ import csv
 import random
 import string
 import os
-
+import secrets
 import time         # delete
 
-static_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'static'))
-file_path = os.path.join(static_root, 'files', 'movies_data_final.csv')
 
-# Function to generate a random email ID
+static_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'static'))
+file_path = os.path.join(static_root, 'files', 'data.csv')
+
+"""Function to generate a random email ID"""
 def generate_email_id():
     username = "".join(random.choices(string.ascii_letters + string.digits, k=10))
     domain = "".join(random.choices(string.ascii_lowercase, k=5))
@@ -18,35 +19,55 @@ def generate_email_id():
     email_id = f"{username}@{domain}.{tld}"
     return email_id
 
+def generate_password():
+    return secrets.token_urlsafe(16)
+
+# headers 
+# movieId, title, genres, userId, rating, timestamp, Director, Writer, Actors,
+#  Plot, Language, Country, Poster, Metascore, imdbVotes, imdbRating, imdbID
+
+
 def run():
     t1 = time.time()     # delete
+    """populating database using csvfile"""
     try:
         with open(f"{file_path}", "r") as file:
-            reader = csv.DictReader(file)
+            rows = csv.DictReader(file)
             Rating = []
-            for row in reader:
+            for row in rows:
+                """Get an existing movie object or create one """
                 movie = Movie.objects.filter(movieId=row["movieId"]).first()
                 if movie is None:
                     movie = Movie(
                         movieId = row["movieId"],
-                        title = row["title"],
+                        title = row["title"][:-7],
                         genre = row["genres"],
-                        imdbId = row["imdbId"],
-                        tmdbId = row["tmdbId"],
-                        timestamp = row["timestamp"]
+                        director = row["Director"],
+                        writer = row["Writer"],
+                        actors = row["Actors"], 
+                        language = row["Language"],
+                        country = row["Country"],
+                        plot = row["Plot"],
+                        poster = row["Poster"],
+                        metascore = row["Metascore"],
+                        imdbVotes = row["imdbVotes"],
+                        imdbRating  = row["imdbRating"],
+                        imdbID = row["imdbID"],
+                        year = int(row["title"][-5:-1]),
+                        timestamp = row["timestamp"],
                     )
                     movie.save()
-
+                    
                 email = generate_email_id()
                 username = row["userId"]
                 
-                # Get an existing one or create one
+                """Get an existing user or create one"""
                 try:
                     user = User.objects.get(username=username)
                 except User.DoesNotExist:
-                    user = User.objects.create(username=row["userId"], email=email)
+                    user = User.objects.create(username=row["userId"], email=email, password=generate_password())
                
-                # Create a MoviesRating object 
+                """Create a MoviesRating object""" 
                 try:
                     rating = MoviesRating.objects.get(movie = movie, user = user, rating = row["rating"])
                 except MoviesRating.DoesNotExist:
