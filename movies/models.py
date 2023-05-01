@@ -4,7 +4,7 @@ from accounts.models import User
 class Movie(models.Model):
     title = models.TextField(primary_key=True)
     movieId = models.IntegerField(blank=True)
-    genre = models.TextField()
+    genres = models.TextField()
     director = models.TextField()
     writer = models.TextField()
     actors = models.TextField()

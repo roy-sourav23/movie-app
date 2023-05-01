@@ -2,143 +2,94 @@
 {% load custom_tags %}
 {% block content %}
 
-{% if movie %}
+
+<style>
+    #emojis-container i {
+        font-size: 4rem;
+        transition: transform 0.2s ease-in-out;
+    }
+
+    #emojis-container i.selected {
+        transform: scale(1.2);
+    }
+
+    .icon {
+        --icon-size-mobile: 3.5rem;
+        /* Set the icon size for mobile screens */
+        --icon-size-desktop: 7rem;
+        /* Set the icon size for desktop screens */
+        font-size: var(--icon-size-mobile);
+        /* Set the default font-size to the mobile size */
+    }
+
+    /* Media query for desktop screens */
+    @media (min-width: 768px) {
+        .icon {
+            font-size: var(--icon-size-desktop);
+            /* Set the font-size to the desktop size */
+        }
+    }
+</style>
+
+<div class="d-flex justify-content-center">
+    <a href="#" class="mx-3">
+        <i class="bi bi-emoji-smile-fill icon" style="--icon-size: 4.375rem; color:#ffcb4c" title="text" name="mood"
+            data-value="smile"></i>
+    </a>
+    <a href="#" class="mx-3">
+        <i class="bi bi-emoji-sunglasses-fill icon" style="--icon-size: 4.375rem; color:#ffcb4c" title="text"
+            name="mood" data-value="sad"></i>
+    </a>
+    <a href="#" class="mx-3" data-value="heart">
+        <i class="bi bi-emoji-heart-eyes-fill icon" style="--icon-size: 4.375rem; color:#ffcb4c" title="text"
+            name="mood" data-value="heart"></i>
+    </a>
+</div>
 
 
-<section class="bg-primary bg-dark opacity-75 p-3 bg-gradient "
-    style="background-image: linear-gradient(to bottom, #009688, #006064, #000000); color:white ;">
-    <div class=" container px-4 px-lg-5 my-5">
-        <div class="row gx-4 gx-lg-5 align-items-center">
-
-            <div class="col-md-6 text-center">
-                <img class="card-img-top mb-5 mb-md-0 mx-auto d-block img-fluid" src="{{ movie.poster }}"
-                    alt="{{ movie.title }} poster"
-                    style="max-width: 70%; max-height: 70%; min-width: 200px; min-height: 150px;" />
+{% if user.is_authenticated %}
+<section class="ftco-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h2 class="heading-section mb-5 pb-md-4">Recommended for you</h2>
             </div>
+            <div class="col-md-12">
+                <div class="featured-carousel owl-carousel">
+                    {% for movie in movies%}
+                    <div class="item">
+                        <div class="blog-entry">
+                            <a href="#" class="block-20 d-flex align-items-start"
+                                style="background-image: url('{{ movie.poster }}');">
+                            </a>
 
-
-            <div class="col-md-6">
-
-                <h1 class="display-5 fw-bolder">{{ movie.title }}</h1>
-                <div class="small mb-1 muted mx-1">{{movie.year}} &middot; {{movie.rated}} &middot; {{movie.runtime}}
+                            <div class="text border border-top-0 p-4">
+                                <h5 class="card-title text-center font-weight-normal">
+                                    <a class="text-decoration-none">{{ movie.title }}</a>
+                                </h5>
+                                <div class="d-flex align-items-center mt-4">
+                                    <a class="mb-0">
+                                        <i class="bi bi-star-fill" style="color: #F5C518;"></i>
+                                        <span class="text-muted ">{{ movie.imdbRating }}</span>
+                                    </a>
+                                    <span class="ml-auto meta2 mb-0 mr-2 meta-chat score  text-muted">
+                                        <span class="score-meta px-1 mx-1 "
+                                            style="background-color:#54A72A; color:white">
+                                            {{ movie.metascore|no_metascore }}
+                                        </span>metascore
+                                    </span>
+                                </div>
+                            </div>
+                            <a href="{% url 'detail' movie.movieId %}" class="stretched-link"></a>
+                        </div>
+                    </div>
+                    {% endfor%}
                 </div>
-                {% for genre in movie.genres%}
-                <span class="badge badge-primary border border-primary text-white"
-                    style="opacity: 1; color: #fff; background-color: #56a0f0;">{{ genre }}</span>
-
-                {% endfor %}
-                <br />
-                <br />
-                <p class="lead">{{movie.plot}}</p>
-                <br />
-
-                <div class="fs-5 mb-5">
-                    <span class="mx-2">
-                        <i class="bi bi-star-fill" style="color: yellow;"></i>{{movie.imdbRating}}/10
-                    </span>
-                    <span class="score mx-2">
-                        <span class="score-meta p-1"
-                            style="background-color:#54A72A; color:white">{{movie.metascore}}</span>
-                        MetaScore
-
-                </div>
-
-                <div class="fs-5 mb-5">
-                    <p><span class="fw-bold">Director </span>&nbsp;
-
-                        {% for director in movie.director %}
-                        <span class=" lead " style="color:#5993f1;">{{director}}</span>&nbsp; &nbsp;
-                        {% endfor %}
-
-                    </p>
-                    <hr />
-                    <p><span class="fw-bold">Writer </span>&nbsp;
-
-                        {% for writer in movie.writer %}
-                        <span class="lead" style="color:#5993f1;">{{writer}}</span>&nbsp; &nbsp;
-                        {% endfor %}
-
-                    </p>
-                    <hr />
-
-                    <p><span class="fw-bold">Actor </span>&nbsp;
-                        {% for actor in movie.actors %}
-                        <span class="lead" style="color:#5993f1;">{{actor}}</span> &nbsp; &nbsp;
-                        {% endfor %}
-                    </p>
-
-                    <hr />
-                </div>
-
             </div>
         </div>
     </div>
-</section>
-<section class="py-1">
-    <div class="container px-4 px-lg-5 my-5">
-        <div class="d-flex align-items-center">
-            <div class="bg-warning rounded-pill align-self-stretch" style="width: 3px; height: 30px;"></div>
-            <h1 class="ipc-title__text" style="line-height: 30px;"><span>Details</span>
-                <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"
-                    class="ipc-icon ipc-icon--chevron-right-inline ipc-icon--inline ipc-title-link ipc-title-link-chevron"
-                    id="iconContext-chevron-right-inline" viewBox="0 0 24 24" fill="currentColor" role="presentation">
-                    <path
-                        d="M5.622.631A2.153 2.153 0 0 0 5 2.147c0 .568.224 1.113.622 1.515l8.249 8.34-8.25 8.34a2.16 2.16 0 0 0-.548 2.07c.196.74.768 1.317 1.499 1.515a2.104 2.104 0 0 0 2.048-.555l9.758-9.866a2.153 2.153 0 0 0 0-3.03L8.62.61C7.812-.207 6.45-.207 5.622.63z">
-                    </path>
-                </svg>
-            </h1>
-        </div>
-        <br />
-
-        <div class="fs-5 mb-5">
-            <p><span class="fw-bold">Release date </span>&nbsp;
-                <span class=" lead " style="color:#5993f1;">{{ movie.release_date}}</span>
-            </p>
-            <hr />
-
-            <p><span class="fw-bold">Countries of origin </span>&nbsp;
-
-                {% for country in movie.country %}
-                <span class=" lead " style="color:#5993f1;">{{country}}</span>&nbsp; &nbsp;
-                {% endfor %}
-
-            </p>
-            <hr />
-
-            <p><span class="fw-bold">Languages </span>&nbsp;
-
-                {% for language in movie.language %}
-                <span class=" lead " style="color:#5993f1;">{{language}}</span>&nbsp; &nbsp;
-                {% endfor %}
-
-            </p>
-            <hr />
-        </div>
-    </div>
-    {% if movie.boxoffice != "N/A" %}
-    <div class="container px-4 px-lg-5 my-5">
-
-        <div class="d-flex align-items-center">
-            <div class="bg-warning rounded-pill align-self-stretch" style="width: 3px; height: 30px;"></div>
-            <h1 class="ipc-title__text" style="line-height: 30px;"><span>Box office</span>
-                <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"
-                    class="ipc-icon ipc-icon--chevron-right-inline ipc-icon--inline ipc-title-link ipc-title-link-chevron"
-                    id="iconContext-chevron-right-inline" viewBox="0 0 24 24" fill="currentColor" role="presentation">
-                    <path
-                        d="M5.622.631A2.153 2.153 0 0 0 5 2.147c0 .568.224 1.113.622 1.515l8.249 8.34-8.25 8.34a2.16 2.16 0 0 0-.548 2.07c.196.74.768 1.317 1.499 1.515a2.104 2.104 0 0 0 2.048-.555l9.758-9.866a2.153 2.153 0 0 0 0-3.03L8.62.61C7.812-.207 6.45-.207 5.622.63z">
-                    </path>
-                </svg>
-            </h1>
-        </div>
-
-        <p><span class="fw-bold">Gross worldwide </span>&nbsp;
-            <span class="text-muted lead ">{{ movie.boxoffice}}</span>
-        </p>
-    </div>
-    {% endif %}
 </section>
 {% endif %}
-
 
 
 {% endblock content %}
