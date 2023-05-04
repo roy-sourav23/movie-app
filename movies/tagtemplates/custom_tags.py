@@ -1,6 +1,5 @@
 from django import template
 from movies.models import Movie
-
 register = template.Library()
 
 @register.simple_tag(name="total_movies")
@@ -23,3 +22,9 @@ def no_metascore(score):
     if not score:
         return "N/A"
     return score
+@register.filter(name="movie_title")
+def movie_title(title):
+    if "," in title:
+        movie = title.split(",")
+        return movie[1]+ " "+ movie[0]
+    return title

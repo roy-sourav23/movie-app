@@ -1,0 +1,161 @@
+{% extends "_base.html" %}
+{% load custom_tags %}
+{% block content %}
+
+<style>
+    .container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .group1,
+    .group2 {
+        display: flex;
+    }
+
+    .group2 {
+        margin-top: 10px;
+
+    }
+
+    #emojis-container i {
+        font-size: 4rem;
+        transition: transform 0.2s ease-in-out;
+    }
+
+    #emojis-container i.selected {
+        transform: scale(1.2);
+    }
+
+    .icon {
+        --icon-size-mobile: 2.5rem;
+        /* Set the icon size for mobile screens */
+        --icon-size-desktop: 4.5rem;
+        /* Set the icon size for desktop screens */
+        font-size: var(--icon-size-mobile);
+        /* Set the default font-size to the mobile size */
+    }
+
+    @media (min-width: 768px) {
+        .icon {
+            font-size: var(--icon-size-desktop);
+            /* Set the font-size to the desktop size */
+        }
+    }
+
+    .icon {
+        color: lightblue;
+    }
+
+    .icon.hover {
+        color: rgba(128, 128, 128, 0.342);
+    }
+
+    .icon.active {
+        color: #ffcb4c;
+    }
+
+    .mood_take {
+        background-image: url("images/movie_cover.jpg");
+        background-size: cover;
+        background-position: center;
+    }
+</style>
+
+<div style="background: linear-gradient(#ffe3ae, #ffaa80, #ff77b3, #b58aff, #66a3ff);">
+    <div class=" d-flex container justify-content-center ">
+        <form method="post" action="">{% csrf_token %}
+            <div class=" col-md-12 text-center top-margin mb-3">
+                <h2 class="heading-section justify-content-center mt-4 pb-md-4">How's your mood?</h2>
+
+                <div class="group1 d-flex justify-content-center">
+                    <a href="#" class=" mx-3">
+                        <i class="bi bi-emoji-laughing-fill icon" style="--icon-size: 4.375rem;" title="happy"
+                            name="mood" data-value="happy"></i>
+                    </a>
+                    <a href="#" class=" mx-3">
+                        <i class="bi bi-emoji-frown-fill icon" style="--icon-size: 4.375rem; " title="sad" name="mood"
+                            data-value="sad"></i>
+                    </a>
+                    <a href="#" class=" mx-3">
+                        <i class="bi bi-emoji-smile-upside-down-fill icon" style="--icon-size: 4.375rem; "
+                            title="satisfied" name="mood" data-value="satisfied"></i>
+                    </a>
+                    <a href="#" class=" mx-3">
+                        <i class="bi bi-emoji-angry-fill icon" style="--icon-size: 4.375rem; " title="angry" name="mood"
+                            data-value="angry"></i>
+                    </a>
+                    <a href="#" class=" mx-3">
+                        <i class="bi bi-emoji-smile-fill icon" style="--icon-size: 4.375rem; " title="peaceful"
+                            name="mood" data-value="peaceful"></i>
+                    </a>
+                </div>
+                <div class="group2 d-flex justify-content-center">
+                    <a href="#" class=" mx-3">
+                        <i class="bi bi-emoji-dizzy-fill icon" style="--icon-size: 4.375rem; " title="fearful"
+                            name="mood" data-value="fearful"></i>
+                    </a>
+                    <a href="#" class=" mx-3">
+                        <i class="bi bi-emoji-heart-eyes-fill icon" style="--icon-size: 4.375rem; " title="excited"
+                            name="mood" data-value="excited"></i>
+                    </a>
+                    <a href="#" class=" mx-3">
+                        <i class="bi bi-emoji-expressionless-fill icon" style="--icon-size: 4.375rem; "
+                            title="depressed" name="mood" data-value="depressed"></i>
+                    </a>
+                    <a href="#" class=" mx-3">
+                        <i class="bi bi-emoji-sunglasses-fill icon" style="--icon-size: 4.375rem; " title="content"
+                            name="mood" data-value="content"></i>
+                    </a>
+                    <a href="#" class=" mx-3">
+                        <i class="bi bi-emoji-neutral-fill icon" style="--icon-size: 4.375rem; " title="sorrowful"
+                            name="mood" data-value="sorrowful"></i>
+                    </a>
+                </div>
+            </div>
+            <input type="hidden" name="selected-emoji" id="selected-emoji">
+            <div class="d-flex justify-content-center mb-4">
+                <button type="submit" class="btn btn-success justify-content-center">submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const icons = document.querySelectorAll('.icon');
+
+    icons.forEach(icon => {
+        icon.addEventListener('mouseenter', () => {
+            icon.classList.add('hover');
+        });
+        icon.addEventListener('mouseleave', () => {
+            icon.classList.remove('hover');
+        });
+
+        icon.addEventListener('click', () => {
+            icon.classList.toggle('active');
+            const value = icon.getAttribute('data-value');
+            icons.forEach(otherIcon => {
+                if (otherIcon !== icon) {
+                    otherIcon.classList.add('icon');
+                }
+            });
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const emojis = document.querySelectorAll('.icon');
+        const selectedEmoji = document.querySelector('#selected-emoji');
+
+        emojis.forEach((emoji) => {
+            emoji.addEventListener('click', (event) => {
+                const value = event.target.getAttribute('data-value');
+                selectedEmoji.value = value;
+            });
+        });
+    });
+
+</script>
+
+
+{% endblock content %}

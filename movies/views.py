@@ -6,6 +6,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 import requests
+from django.shortcuts import redirect
 from environs import Env
 
 env = Env()
@@ -72,21 +73,36 @@ class HomePageView(TemplateView):
             return self.request.user.username
         else:
             return "1"
-
-    def get_genre(self):
         
-        genre = "action"
-        if not genre:
-            return {}
+    """convert genre from mood"""
+    def mood_to_genre(self):
+        username = self.get_username()
+        user = User.objects.get(username=username)
+        mood = user.user_mood
+        genre = ""
+        if mood.lower() == "happy":
+            genre= "sci-fi"
+        elif mood.lower() == "sad":
+            genre = "drama"
+        elif mood.lower() == "satisfied":
+            genre = "animation"
+        elif mood.lower() == "angry":
+            genre = "romance"
+        elif mood.lower() == "peaceful":
+            genre = "fantasy"
+        elif mood.lower() == "fearful":
+            genre = "adventure"
+        elif mood.lower() == "excited":
+            genre = "crime"
+        elif mood.lower() == "depressed":
+            genre = "comedy"
+        elif mood.lower() == "content":
+            genre = "mystery"
+        elif mood.lower() == "sorrowful":
+            genre = "action"
         return genre
-        
-    def get_mood_based_recommendation(self, genre, recommended_list):
-        mood_movies = []
-        for movie in recommended_list:
-            if (genre in movie.genres and len(movie.title) < 20) and len(mood_movies)<10:
-                mood_movies.append(mood_movies)
-                return mood_movies
-
+    
+    """returns recommended movie list"""
     def main(self):
 
         """extract list of features for each movie"""
@@ -125,22 +141,44 @@ class HomePageView(TemplateView):
                 if recommended_movie not in recommended_movies:
                     recommended_movies.append(recommended_movie)
 
+        return recommended_movies
 
-        genre = self.get_genre()
+    
+    """recommends top 10 movie"""
+    def top10recommended(self):
         top10recommended = [] 
-        self.get_mood_based_recommendation(genre, recommended_movies)
+        recommended_movies = self.main()
         for movie in recommended_movies :
             if len(movie.title) < 10:
                 top10recommended.append(movie)
         if len(top10recommended)> 10:
             return top10recommended[:10]
         return top10recommended
+    
+    
+    """recommends movies based on genre"""
+    def get_mood_based_recommendation(self, genre):
+        
+        top10movies = self.top10recommended()
+        mood_movies = []
+        recommended_list = self.main()
+        for movie in recommended_list:  
+            if genre in movie.genres.lower() and len(movie.title)< 30 and movie not in top10movies:
+                mood_movies.append(movie)
+        if len(mood_movies)<= 10:
+            return mood_movies
+        return mood_movies[:10]
+        
+    
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        movies = self.main()
+        movies = self.top10recommended()
+        genre = self.mood_to_genre()
         if movies:
             context["movies"] = movies
+        context["mood"] = ""
+        context["mood_movies"] = self.get_mood_based_recommendation(genre)
         return context
         
 
@@ -155,4 +193,17 @@ class DetailPageView(TemplateView):
         context["movie"] = movie
         return context
 
-    
+class MoodPageView(TemplateView):
+    template_name = "mood_movies.html"
+    success_url = "home"
+
+    def post(self, request, *args, **kwargs):
+        if request.POST.get("selected-emoji"):
+            selected_emoji = request.POST.get("selected-emoji")
+        else:
+            selected_emoji = "happy" 
+        user = User.objects.get(username=request.user.username)
+        user.user_mood = selected_emoji
+        user.save()
+        return redirect("home")
+       

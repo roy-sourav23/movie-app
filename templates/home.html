@@ -3,51 +3,53 @@
 {% block content %}
 
 
-<style>
-    #emojis-container i {
-        font-size: 4rem;
-        transition: transform 0.2s ease-in-out;
-    }
-
-    #emojis-container i.selected {
-        transform: scale(1.2);
-    }
-
-    .icon {
-        --icon-size-mobile: 3.5rem;
-        /* Set the icon size for mobile screens */
-        --icon-size-desktop: 7rem;
-        /* Set the icon size for desktop screens */
-        font-size: var(--icon-size-mobile);
-        /* Set the default font-size to the mobile size */
-    }
-
-    /* Media query for desktop screens */
-    @media (min-width: 768px) {
-        .icon {
-            font-size: var(--icon-size-desktop);
-            /* Set the font-size to the desktop size */
-        }
-    }
-</style>
-
-<div class="d-flex justify-content-center">
-    <a href="#" class="mx-3">
-        <i class="bi bi-emoji-smile-fill icon" style="--icon-size: 4.375rem; color:#ffcb4c" title="text" name="mood"
-            data-value="smile"></i>
-    </a>
-    <a href="#" class="mx-3">
-        <i class="bi bi-emoji-sunglasses-fill icon" style="--icon-size: 4.375rem; color:#ffcb4c" title="text"
-            name="mood" data-value="sad"></i>
-    </a>
-    <a href="#" class="mx-3" data-value="heart">
-        <i class="bi bi-emoji-heart-eyes-fill icon" style="--icon-size: 4.375rem; color:#ffcb4c" title="text"
-            name="mood" data-value="heart"></i>
-    </a>
-</div>
-
 
 {% if user.is_authenticated %}
+<section class="ftco-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h2 class="heading-section mb-5 pb-md-4">Based on your mood</h2>
+            </div>
+            <div class="col-md-12">
+                <div class="featured-carousel owl-carousel">
+                    {% for movie in mood_movies%}
+                    <div class="item">
+                        <div class="blog-entry">
+                            <a href="#" class="block-20 d-flex align-items-start"
+                                style="background-image: url('{{ movie.poster }}');">
+                            </a>
+
+                            <div class="text border border-top-0 p-4">
+                                <h5 class="card-title text-center font-weight-normal">
+                                    <a class="text-decoration-none">{{ movie.title|movie_title }}</a>
+                                </h5>
+                                <h5 class="card-text text-center small">
+                                    <a class="text-decoration-none ">{{ movie.year }}</a>
+                                </h5>
+                                <div class="d-flex align-items-center mt-4">
+                                    <a class="mb-0">
+                                        <i class="bi bi-star-fill" style="color: #F5C518;"></i>
+                                        <span class="text-muted ">{{ movie.imdbRating }}</span>
+                                    </a>
+                                    <span class="ml-auto meta2 mb-0 mr-2 meta-chat score  text-muted">
+                                        <span class="score-meta px-1 mx-1 "
+                                            style="background-color:#54A72A; color:white">
+                                            {{ movie.metascore|no_metascore }}
+                                        </span>metascore
+                                    </span>
+                                </div>
+                            </div>
+                            <a href="{% url 'detail' movie.movieId %}" class="stretched-link"></a>
+                        </div>
+                    </div>
+                    {% endfor%}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <section class="ftco-section">
     <div class="container">
         <div class="row">
@@ -65,7 +67,10 @@
 
                             <div class="text border border-top-0 p-4">
                                 <h5 class="card-title text-center font-weight-normal">
-                                    <a class="text-decoration-none">{{ movie.title }}</a>
+                                    <a class="text-decoration-none">{{ movie.title|movie_title }}</a>
+                                </h5>
+                                <h5 class="card-text text-center small">
+                                    <a class="text-decoration-none ">{{ movie.year }}</a>
                                 </h5>
                                 <div class="d-flex align-items-center mt-4">
                                     <a class="mb-0">
@@ -90,6 +95,37 @@
     </div>
 </section>
 {% endif %}
+
+
+
+<script>
+    // Get all the icon elements
+    const icons = document.querySelectorAll('.icon');
+
+    // Add a mouseenter event listener to each icon
+    icons.forEach(icon => {
+        icon.addEventListener('mouseenter', () => {
+            // Add the 'hover' class to the icon
+            icon.classList.add('hover');
+        });
+
+        // Add a mouseleave event listener to each icon
+        icon.addEventListener('mouseleave', () => {
+            // Remove the 'hover' class from the icon
+            icon.classList.remove('hover');
+        });
+
+        // Add a click event listener to each icon
+        icon.addEventListener('click', () => {
+            // Toggle the 'active' class on the clicked icon
+            icon.classList.toggle('active');
+        });
+    });
+
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/4.1.0/mustache.min.js"></script>
+
 
 
 {% endblock content %}
