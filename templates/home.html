@@ -3,7 +3,6 @@
 {% block content %}
 
 
-
 {% if user.is_authenticated %}
 <section class="ftco-section">
     <div class="container">
@@ -99,25 +98,18 @@
 
 
 <script>
-    // Get all the icon elements
     const icons = document.querySelectorAll('.icon');
 
-    // Add a mouseenter event listener to each icon
     icons.forEach(icon => {
         icon.addEventListener('mouseenter', () => {
-            // Add the 'hover' class to the icon
             icon.classList.add('hover');
         });
 
-        // Add a mouseleave event listener to each icon
         icon.addEventListener('mouseleave', () => {
-            // Remove the 'hover' class from the icon
             icon.classList.remove('hover');
         });
 
-        // Add a click event listener to each icon
         icon.addEventListener('click', () => {
-            // Toggle the 'active' class on the clicked icon
             icon.classList.toggle('active');
         });
     });

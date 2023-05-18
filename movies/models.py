@@ -4,6 +4,8 @@ from accounts.models import User
 class Movie(models.Model):
     title = models.TextField(primary_key=True)
     movieId = models.IntegerField(blank=True)
+    rated = models.CharField(max_length=20, blank=True)
+    runtime = models.CharField(max_length=20, blank=True)
     genres = models.TextField()
     director = models.TextField()
     writer = models.TextField()
@@ -17,7 +19,8 @@ class Movie(models.Model):
     imdbRating = models.FloatField()
     imdbID = models.CharField(max_length=10)
     year = models.SmallIntegerField(blank=True, null=True)
-    timestamp = models.IntegerField(blank=True, null=True)
+    boxoffice = models.CharField(max_length=20, blank=True)
+
     def __str__(self):
         return self.title
 

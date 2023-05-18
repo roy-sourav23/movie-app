@@ -7,5 +7,4 @@ urlpatterns = [
     path("movie/<int:movieId>/", DetailPageView.as_view(), name="detail"),
     path("change-mood/", MoodPageView.as_view(), name="change_mood"),
     
-    
 ]

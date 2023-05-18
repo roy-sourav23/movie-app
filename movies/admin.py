@@ -5,7 +5,7 @@ from .models import Movie, MoviesRating
 
 class MovieAdmin(ModelAdmin):
     model = Movie
-    list_display = ["movieId", "title", "director", "writer", "actors", "language", "country","plot","poster","metascore","imdbVotes","imdbRating","imdbID", "genres", "timestamp", "year"]
+    list_display = ["movieId", "title", "director", "writer", "actors", "language", "country","plot","poster","metascore","imdbVotes","imdbRating","imdbID", "genres", "year"]
 
 
 class MoviesRatingAdmin(ModelAdmin):

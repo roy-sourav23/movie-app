@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.github"
 ]
 
 MIDDLEWARE = [
@@ -64,6 +65,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = "core.urls"
@@ -79,6 +81,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                'social_django.context_processors.backends',  
+                'social_django.context_processors.login_redirect',
             ],
         "libraries": {
             "custom_tags": "movies.tagtemplates.custom_tags",
@@ -141,6 +145,12 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STATIC_FILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
+
+#media files
+MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = "/assets/"
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -188,3 +198,14 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
+
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/profile/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/profile/'
+SOCIAL_AUTH_RAISE_EXCEPTIONS = False
+
+SOCIAL_AUTH_TWITTER_KEY=env("SOCIAL_AUTH_TWITTER_KEY")
+SOCIAL_AUTH_TWITTER_SECRET=env("SOCIAL_AUTH_TWITTER_SECRET")
+
+
+SOCIAL_AUTH_GITHUB_KEY=env("SOCIAL_AUTH_GITHUB_KEY")
+SOCIAL_AUTH_GITHUB_SECRET=env("SOCIAL_AUTH_GITHUB_SECRET")

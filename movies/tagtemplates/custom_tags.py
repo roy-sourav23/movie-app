@@ -1,6 +1,10 @@
 from django import template
-from movies.models import Movie
+from movies.models import Movie, MoviesRating
+from accounts.models import User, userProfile
 register = template.Library()
+
+def get_current_user(request):
+    return request.user
 
 @register.simple_tag(name="total_movies")
 def total_movies():
@@ -21,10 +25,12 @@ def text_to_list(text):
 def no_metascore(score):
     if not score:
         return "N/A"
-    return score
+    return score[0:2]
+
 @register.filter(name="movie_title")
 def movie_title(title):
     if "," in title:
         movie = title.split(",")
         return movie[1]+ " "+ movie[0]
     return title
+

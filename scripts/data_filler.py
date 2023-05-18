@@ -24,7 +24,8 @@ def generate_password():
 
 # headers 
 # movieId, title, genres, userId, rating, timestamp, Director, Writer, Actors,
-#  Plot, Language, Country, Poster, Metascore, imdbVotes, imdbRating, imdbID
+# Plot, Language, Country, Poster, Metascore, imdbVotes, imdbRating, imdbID, 
+# Runtime, Rated, BoxOffice
 
 
 def run():
@@ -41,7 +42,7 @@ def run():
                     movie = Movie(
                         movieId = row["movieId"],
                         title = row["title"][:-7],
-                        genre = row["genres"],
+                        genres = row["genres"],
                         director = row["Director"],
                         writer = row["Writer"],
                         actors = row["Actors"], 
@@ -53,8 +54,10 @@ def run():
                         imdbVotes = row["imdbVotes"],
                         imdbRating  = row["imdbRating"],
                         imdbID = row["imdbID"],
-                        year = int(row["title"][-5:-1]),
-                        timestamp = row["timestamp"],
+                        #year = int(row["title"][-5:-1]),
+                        boxoffice = row["Boxoffice"],
+                        rated = row["Rated"],
+                        runtime = row["Runtime"]
                     )
                     movie.save()
                     
