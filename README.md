@@ -4,26 +4,36 @@
 
 ### Linux
 2. To run the batch file using the call command, enter the following command:
-> bash build.sh
+```
+bash build.sh
+```
 
 ### windows
 2. To run the batch file using the call command, enter the following command:
-> call build.bat
+```
+call build.bat
+```
 
 ### Create a superuser
 3. Create a _superuser_ account 
-> python manage.py createsuperuser
+```
+python manage.py createsuperuser
+```
 
 ### Run the Web Server
 4. Run python development Server
-> python manage.py runserver
+```
+python manage.py runserver
+```
 
 ### Admin Account
 - To login into admin go to 127.0.0.1:8000/admin/
 
 ### Docker
 - If you have Docker and docker-compose installed, you can just run:
-> docker-compose up --build
+```
+docker-compose up --build
+```
 
 ## Additonal Info
 For OMDB_API_KEY visit https://www.omdbapi.com/ and request an API key(for search function)
