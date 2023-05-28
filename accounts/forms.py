@@ -30,7 +30,12 @@ class CustomUserChangeForm(UserChangeForm):
         fields = ("email", "first_name" ,"last_name")
 
 
-class ProfileFillUpForm(forms.ModelForm):
+class ProfileCreateForm(forms.ModelForm):
+    class Meta:
+        model = userProfile
+        fields = ('profile_image', 'age', 'bio', 'country')
+
+class ProfileEditForm(forms.ModelForm):
     first_name = forms.CharField(max_length=30, required=False)
     last_name = forms.CharField(max_length=30, required=False)
     class Meta:

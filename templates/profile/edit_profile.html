@@ -481,8 +481,8 @@ link: https://codepen.io/luxonauta/pen/xxVPOxO
                         <label for="description">About you</label>
                     </div>
                     <div class="grid-65">
-                        <textarea name="bio" id="description" cols="30" rows="auto" value="{{userprofile.bio}}"
-                            tabindex="3"></textarea>
+                        <textarea name="bio" id="description" cols="30" rows="auto"
+                            tabindex="3">{{userprofile.bio}}</textarea>
                     </div>
                 </fieldset>
 
@@ -497,7 +497,8 @@ link: https://codepen.io/luxonauta/pen/xxVPOxO
                 </fieldset>
 
                 <div class="button-container d-flex ">
-                    <button type="button" class="btn btn-danger cancel mb-2 ml-4 mr-4">Cancel</button>
+                    <button type="button" class="btn btn-danger cancel mb-2 ml-4 mr-4"
+                        onclick="goBack()">Cancel</button>
                     <button type="submit" class="btn btn-info mb-2 ml-5 justify-content-center">Save Changes</button>
                 </div>
             </form>
@@ -507,7 +508,11 @@ link: https://codepen.io/luxonauta/pen/xxVPOxO
 </div>
 
 
-<script>//Tabs Layout Code
+<script>
+    function goBack() {
+        window.history.back();
+    }
+
     $("#tabs").tabs({
         activate: function (event, ui) {
             var active = $('#tabs').tabs('option', 'active');

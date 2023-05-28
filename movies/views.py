@@ -8,6 +8,7 @@ import numpy as np
 import requests
 from django.shortcuts import redirect
 from environs import Env
+from django.shortcuts import redirect
 
 env = Env()
 
@@ -68,6 +69,13 @@ class HomePageView(TemplateView):
     model = Movie
     template_name = "home.html"
     
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            user = self.request.user
+            if not user.profile_created:
+                return redirect("create_profile")
+        return super().dispatch(request, *args, **kwargs)
+
     def get_username(self):
         if self.request.user.is_authenticated:
             return self.request.user.username
@@ -157,8 +165,7 @@ class HomePageView(TemplateView):
     
     
     """recommends movies based on genre"""
-    def get_mood_based_recommendation(self, genre):
-        
+    def get_mood_based_recommendation(self, genre):   
         top10movies = self.top10recommended()
         mood_movies = []
         recommended_list = self.main()
@@ -169,8 +176,6 @@ class HomePageView(TemplateView):
             return mood_movies
         return mood_movies[:10]
         
-    
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         movies = self.top10recommended()
@@ -192,6 +197,7 @@ class DetailPageView(TemplateView):
         movie = Movie.objects.get(movieId=movie_id)
         context["movie"] = movie
         return context
+
 
 class MoodPageView(TemplateView):
     template_name = "mood_movies.html"

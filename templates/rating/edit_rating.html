@@ -174,6 +174,16 @@
         margin: 0;
     }
 
+    .fa-twitter,
+    .fa-facebook,
+    .fa-github {
+        height: 20px;
+        width: 20px;
+        text-align: center;
+        line-height: 20px;
+        padding: 2.5px;
+        margin-left: -15px;
+    }
 
     /*Input Fields Styles
 =========================*/
@@ -403,20 +413,54 @@
 <div class="wrapper">
     <div class="profile">
         <div class="content">
-            <h1>Add Rating</h1>
+            <h1>Edit Rating</h1>
 
             <!-- Photo -->
 
+
+
         </div>
         <form method="post">{% csrf_token %}
-            {{form|crispy}}
-            <button type="submit" class="btn btn-info mb-2 ml-5 justify-content-center">Add</button>
+            <fieldset>
+                <div class="grid-65 mr-4">
+                    <span class="mr-5">
+                        <img class="mr-5 " src="{{ moviesrating.movie.poster }}" style="height:50%; width:50%" alt="">
+                    </span>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="grid-35">
+                    <label for="movie">Movie</label>
+                </div>
+                <div class="grid-65">
+                    <input name="movie" type="text" id="movie" value="{{moviesrating.movie}}" tabindex="1" readonly />
+                </div>
+            </fieldset>
+
+            <!-- Rating -->
+            <fieldset>
+                <div class="grid-35">
+                    <label for="ating">Rating</label>
+                </div>
+                <div class="grid-65">
+                    <input type="number" id="rating" name="rating" value="{{moviesrating.rating}}" tabindex="5" />
+                </div>
+            </fieldset>
+
+            <div class="button-container d-flex ">
+                <button type="button" class="btn btn-danger cancel mb-2 ml-4 mr-4" onclick="goBack()">Cancel</button>
+                <button type="submit" class="btn btn-info mb-2 ml-5 justify-content-center">Save Changes</button>
+            </div>
         </form>
 
     </div>
 </div>
 </div>
-
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
 
 
 

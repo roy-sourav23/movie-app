@@ -11,7 +11,7 @@
     /* Base Styles */
 
     :root {
-        font-size: 10px;
+        font-size: 12px;
     }
 
     *,
@@ -69,8 +69,8 @@
     }
 
     .profile-image img {
-        width: 100%;
-        height: 100%;
+        width: 80%;
+        height: 80%;
         object-fit: cover;
         border-radius: 50%;
     }
@@ -177,7 +177,7 @@
         }
 
         .profile-image img {
-            width: 7rem;
+            width: 5rem;
         }
 
         .profile-user-settings {
@@ -279,12 +279,11 @@
 
             <div class="profile-image">
                 {% if user.userprofile.profile_image %}
-                <img src="{{ user.userprofile.profile_image.url }}" alt="">
+                <img src="{{ user.userprofile.profile_image.url }}" style="height: 200px, 200px" alt="">
 
                 {% else %}
                 <img src="{% static 'images/default_profile.jpg' %}" alt="">
                 {% endif %}
-
 
             </div>
 
@@ -292,8 +291,8 @@
 
                 <h1 class="profile-user-name">{{user.username}}</h1>
 
-                <button class="btn profile-edit-btn"><a href="{% url 'edit_profile' user.userprofile.pk %}">Edit
-                        Profile</a></button>
+                <button class="btn profile-edit-btn mr-5"><a href="{% url 'edit_profile' user.userprofile.pk %}">Edit
+                        Profile <i class="bi bi-pencil-square ml-2"></i></a></button>
                 <button class="btn profile-edit-btn mr-5">
                     <a href="{% url 'add_rating' %}">
                         <span>Add ratings</span>

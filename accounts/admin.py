@@ -9,7 +9,7 @@ class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = User
-    list_display = ["username", "email", "first_name","last_name", "user_mood"]
+    list_display = ["username", "email", "first_name","last_name", "user_mood", "profile_created"]
 
 class CustomUserProfile(admin.ModelAdmin):
     model = userProfile

@@ -1,12 +1,11 @@
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, UpdateView
-from .forms import CustomUserCreationForm, ProfileFillUpForm, RatingForm
+from .forms import CustomUserCreationForm, RatingForm, ProfileCreateForm, ProfileEditForm
 from accounts.models import userProfile, User
-from movies.models import Movie, MoviesRating
+from movies.models import MoviesRating
 from django.contrib.auth.mixins import UserPassesTestMixin
-from social_django.models import UserSocialAuth
-
+from django.db import transaction
 
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
@@ -29,8 +28,7 @@ class ProfileView(UserPassesTestMixin, TemplateView):
         return context
     
 class ProfileCreateView(UserPassesTestMixin, CreateView):
-    #form_class = ProfileFillUpForm
-    fields = ["profile_image", 'age', 'bio']
+    form_class = ProfileCreateForm
     model = userProfile
     template_name = "profile/create_profile.html"
     success_url = reverse_lazy("profile")
@@ -38,12 +36,15 @@ class ProfileCreateView(UserPassesTestMixin, CreateView):
     def test_func(self):
         return self.request.user.is_authenticated
     
+    @transaction.atomic
     def form_valid(self, form):
         form.instance.user = self.request.user
+        self.request.user.profile_created = True
+        self.request.user.save(update_fields=["profile_created"])
         return super().form_valid(form)
     
 class ProfileEditView(UserPassesTestMixin, UpdateView):
-    form_class = ProfileFillUpForm
+    form_class = ProfileEditForm
     model = userProfile
     template_name = "profile/edit_profile.html"
     success_url = reverse_lazy("profile")
@@ -70,7 +71,7 @@ class ProfileEditView(UserPassesTestMixin, UpdateView):
 class AddRatingView(CreateView):
     form_class = RatingForm
     model = MoviesRating
-    template_name = "profile/add_rating.html"
+    template_name = "rating/add_rating.html"
     success_url = reverse_lazy("profile")
 
     def form_valid(self, form):
@@ -88,7 +89,7 @@ class AddRatingView(CreateView):
 class EditRatingView(UpdateView):
     form_class = RatingForm
     model = MoviesRating
-    template_name = "profile/edit_rating.html"
+    template_name = "rating/edit_rating.html"
     success_url = reverse_lazy("profile")
 
     def form_valid(self, form):
